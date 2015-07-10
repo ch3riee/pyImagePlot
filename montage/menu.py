@@ -70,7 +70,7 @@ PyMontage Menu
 
 	def montage_dir(self):
 		input_dir = self.enter_dir("Provide full path to directory to create montages: ")
-		output_dir = self.enter_dir("Provide full path to valid direcotry to save montages: ")
+		output_dir = self.enter_dir("Provide full path to valid directory to save montages: ")
 		self.montage.input_data(src_path = input_dir, dest_path = output_dir)
 		print("Creating montages...")
 		self.montage.montages_from_directory()
@@ -105,7 +105,7 @@ PyMontage Menu
 	def montage_from_csv(self):
 		input_csv = self.enter_csv("Provide full path to csv file for creating montages: ")
 		image_path = self.enter_dir("Provide path to where images are located: ")
-		output_dir = self.enter_dir("Provide full path to valid direcotry to save montages: ")
+		output_dir = self.enter_dir("Provide full path to valid directory to save montages: ")
 		self.montage.input_data(src_path = input_csv, dest_path = output_dir, image_src_path = image_path)
 		print("Creating montages...")
 		self.montage.montage_from_csv_binned()
@@ -113,7 +113,7 @@ PyMontage Menu
 	def vertical_montage_from_csv(self):
 		input_csv = self.enter_csv("Provide full path to csv file for creating montages: ")
 		image_path = self.enter_dir("Provide path to where images are located: ")
-		output_dir = self.enter_dir("Provide full path to valid direcotry to save montages: ")
+		output_dir = self.enter_dir("Provide full path to valid directory to save montages: ")
 		self.montage.input_data(src_path = input_csv, dest_path = output_dir, image_src_path = image_path)
 		print("Creating montages...")
 		self.montage.montage_from_csv_binned(ncols = 0, nrows = 1)		
@@ -121,7 +121,7 @@ PyMontage Menu
 	def image_hist_from_csv(self):
 		#changed to lower case csv not CSV
 		input_csv = self.enter_csv("Provide full path to csv file for creating image histogram: ")
-		output_dir = self.enter_dir("Provide full path and fielname to  save image histogram: ")
+		output_dir = self.enter_dir("Provide full path to valid directory to  save image histogram: ")
 		#accesses the histogram object it previously used instantiated and calls input_data method
 		self.histogram.input_data(src_path = input_csv, dest_path = output_dir)
 		print("Creating image histogram...")
@@ -132,7 +132,7 @@ PyMontage Menu
 	def image_hist_panda(self):
 		#gets all the necessary information from the user
 		input_csv = self.enter_csv("Provide full path to csv file for creating image histogram: ")
-		output_dir = self.enter_dir("Provide full path and fielname to save image histogram: ")
+		output_dir = self.enter_dir("Provide full path to valid directory to  save image histogram: ")
 		xvar = self.enter_xvar("Provide X Variable to bin for creating image histogram: ")
 		sortvar = self.enter_sortvar("Provide the sort variable for sorting image histogram: ")
 		numbins = self.enter_numbins("Provide the number of bins for creating image histogram: ")
