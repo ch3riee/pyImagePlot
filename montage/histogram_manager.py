@@ -3,7 +3,7 @@
 import heapq
 import csv
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageChops, ImageOps
 #imports for Damon's Modified Code
 import pandas as pd
 import sys
@@ -65,12 +65,11 @@ class Histograms:
 		NumBins = biggestbin
 		#size of each image
 		size = 40
-		size1 = size + 5
+		size1 = size 
 		graphH = (size1 * height) 
 		graphW = size1 * NumBins
 		#creating the background window
-		print "building image..."
-		img = Image.new('RGB',(graphW,graphH),(0,0,0))
+		img = Image.new('RGB',(graphW,graphH),(255,255,255))
 		SIZES = size, size
 		#for loop to loop through each bin and paste
 		for key in bins:
@@ -80,16 +79,18 @@ class Histograms:
 			xCoord = key * size1
 			#while loop to loop through the heapq and paste the images one by one from bottom up
 			while len(theQ) != 0:
-				#getting the image path 
+			#getting the image path 
 				popped = heapq.heappop(theQ)
 				path = popped[1]
 				im = Image.open(path)
 				im.thumbnail(SIZES, Image.ANTIALIAS)
-				img.paste(im,(xCoord,yCoord))
+				image_size = im.size
+				thumb = ImageOps.fit(im, SIZES, Image.ANTIALIAS, (0.5,0.5))
+				img.paste(thumb,(xCoord,yCoord))
 				yCoord = yCoord - size1
 
 		#saving the image 
-		img.save(self.dest_path)    
+		img.save(self.dest_path + "hist.png")    
 		print "...done."
 
 #Damon's Panda Code
@@ -153,7 +154,7 @@ class Histograms:
 		print "Saving image..."
 
 		# save written canvas to outfile
-		canvas.save(self.outfile)
+		canvas.save(self.dest_path + "hist.png")
 
 		# optional: crop image then save
 		#top = px_h/2

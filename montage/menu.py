@@ -1,18 +1,11 @@
 import sys
 import os
-#incorporating the class Montages that is stored in the python file montage_manager
 from montage_manager import Montages
 from histogram_manager import Histograms
 
-#initializing a python class
 class Menu:
-	#three apostrophes allow you to have strings that span multiple lines
-	#If you use the attribute reference _doc_ it returns this doc string.
 	'''Display menu and respond to choices when run.'''
-	#the instantiation operation would be like x = Menu(), which is an empty object by default
-	#However if you have a _init_(self) special method, it will automaticaly invoke this method for the new class object
 	def __init__(self):
-		#creating and instantiating the member variables
 		self.montage = Montages()
 		self.histogram = Histograms()
 		self.choices = {
@@ -22,60 +15,47 @@ class Menu:
 		"4": self.image_hist_from_csv,
 		"5": self.image_hist_panda,
 		"6": self.quit
-		
 		}
-	#method that just prints out and displays the menu
+
 	def display_menu(self):
 		print("""
 PyMontage Menu
 
 1. Create montages from recursively from given directory and sub-directories
 2. Create montages from provided CSV files (split by categories or bins)
-3. Create vertical montge from provided CSV file
+3. Create vertical montage from provided CSV file
 4. Create image histogram from provided CSV file
-5. Create image histogram using panda 
+5. Create image histogram using panda
 6. Quit 
 """)
-	#method for the actual running of the menu. Is called later by _main_
+
 	def run(self):
 		'''Display the menu and responsd to choices'''
-		#will remain true until a valid choice is entered because the method will then be carried out
 		while True:
-			#first call ths display_menu function
 			self.display_menu()
-			#Set variable choice equal to what the user inputs for the question
 			choice = input("Enter an option: ")
-			#set variable action equal to the corresponding string name that is also a method name
 			action = self.choices.get(str(choice))
-			#if that action is true, which it will be if selected
 			if action:
-				#call the method, and run the correct option
 				action()
-			#Else let the user know that they did not pick a valid choice
 			else:
 				print("{0} is not a valid choice".format(choice))
-	#helper method that is used by the other methods from the options to obtain the directory
+
 	def enter_dir(self, message = "Provide valid directory"):
 		while True:
-			#set provided_dir to be the input that is given after you print out the message
-			#in python 2 raw_input gives a string back while input gives an expression. in python 3 you just use input() which returns a string
 			provided_dir = raw_input(message)
-			#if this path is an actual directory , than you break (os.path should be used for file parsing, building testing on file names )
-			#can be used by multiple platforms, is platform independent manipulation
-			#os.path.isdir() returns true if the path given is an actual directory
 			if os.path.isdir(provided_dir): break
 			else: print("Not a valid directory")
 
-		return provided_dir #returns the directory name so you can use it
+		return provided_dir
 
 	def montage_dir(self):
 		input_dir = self.enter_dir("Provide full path to directory to create montages: ")
-		output_dir = self.enter_dir("Provide full path to valid directory to save montages: ")
+		output_dir = self.enter_dir("Provide full path to valid direcotry to save montages: ")
 		self.montage.input_data(src_path = input_dir, dest_path = output_dir)
 		print("Creating montages...")
 		self.montage.montages_from_directory()
 		print("Saving montages complete.")
-	#why do we need this message if we define it later? default?
+
 	def enter_csv(self, message = "provide path to valid csv"):
 		while True:
 			provided_csv = raw_input(message)
@@ -84,7 +64,23 @@ PyMontage Menu
 
 		return provided_csv
 
-	#Adding helper functions
+	def montage_from_csv(self):
+		input_csv = self.enter_csv("Provide full path to csv file for creating montages: ")
+		image_path = self.enter_dir("Provide path to where images are located: ")
+		output_dir = self.enter_dir("Provide full path to valid direcotry to save montages: ")
+		self.montage.input_data(src_path = input_csv, dest_path = output_dir, image_src_path = image_path)
+		print("Creating montages...")
+		self.montage.montage_from_csv_binned()
+
+	def vertical_montage_from_csv(self):
+		input_csv = self.enter_csv("Provide full path to csv file for creating montages: ")
+		image_path = self.enter_dir("Provide path to where images are located: ")
+		output_dir = self.enter_dir("Provide full path to valid direcotry to save montages: ")
+		self.montage.input_data(src_path = input_csv, dest_path = output_dir, image_src_path = image_path)
+		print("Creating montages...")
+		self.montage.montage_from_csv_binned(ncols = 0, nrows = 1)		
+
+		#Adding helper functions
 	#X var in an input array to be binned, essentially the column in the csv file you want
 	def enter_xvar(self, message = "choose your x variable"):
 		providedx_var = raw_input(message)
@@ -101,22 +97,6 @@ PyMontage Menu
 	def enter_thumbsize(self, message = "choose the thumbnail size"):
 		providedthumbsize = raw_input(message)
 		return providedthumbsize
-
-	def montage_from_csv(self):
-		input_csv = self.enter_csv("Provide full path to csv file for creating montages: ")
-		image_path = self.enter_dir("Provide path to where images are located: ")
-		output_dir = self.enter_dir("Provide full path to valid directory to save montages: ")
-		self.montage.input_data(src_path = input_csv, dest_path = output_dir, image_src_path = image_path)
-		print("Creating montages...")
-		self.montage.montage_from_csv_binned()
-
-	def vertical_montage_from_csv(self):
-		input_csv = self.enter_csv("Provide full path to csv file for creating montages: ")
-		image_path = self.enter_dir("Provide path to where images are located: ")
-		output_dir = self.enter_dir("Provide full path to valid directory to save montages: ")
-		self.montage.input_data(src_path = input_csv, dest_path = output_dir, image_src_path = image_path)
-		print("Creating montages...")
-		self.montage.montage_from_csv_binned(ncols = 0, nrows = 1)		
 
 	def image_hist_from_csv(self):
 		#changed to lower case csv not CSV
@@ -141,6 +121,7 @@ PyMontage Menu
 		print("Creating image histogram...")
 		#calls the correct histogram method
 		self.histogram.create_image_hist_panda()
+
 
 	def quit(self):
 		print("Good bye!")

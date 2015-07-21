@@ -79,6 +79,7 @@ class Montages:
 			montage_filename = "bin_" + bin
 			self.create_montage(path_parents[bin], montage_filename, ncols, nrows)
 
+	
 
 
 if __name__ == "__main__":
@@ -86,6 +87,5 @@ if __name__ == "__main__":
 	image_dir = "/Users/myazdaniUCSD/Dropbox/Broadway_processed_data/broadway_images_sample/"
 	out_file = "/Users/myazdaniUCSD/Desktop/"
 	a_montage = Montages()
-	#CHANGED to input_data from intput data
-	a_montage.input_data(src_path = in_file, dest_path = out_file, image_src_path = image_dir)
+	a_montage.intput_data(src_path = in_file, dest_path = out_file, image_src_path = image_dir)
 
